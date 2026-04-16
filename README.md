@@ -55,21 +55,6 @@ Une fois démarré, rends-toi sur 👉 [http://localhost:3000](http://localhost:
 
 ---
 
-## 🧩 Structure du projet
-
-vite-et-gourmand/
-├── app/ → Routage et pages principales (App Router)
-├── components/ → Composants UI réutilisables
-├── lib/ → Utilitaires et configuration Prisma
-├── prisma/ → Schéma et migrations de la base de données
-├── public/ → Images, icônes, favicon…
-├── styles/ → Feuilles de style globales et modules CSS
-├── eslint.config.mjs → Configuration ESLint
-├── tsconfig.json → Configuration TypeScript
-└── next.config.mjs → Configuration Next.js
-
----
-
 ## 💾 Base de données
 
 Le projet utilise **PlanetScale (MySQL)** pour une base scalable et sans downtime.  
