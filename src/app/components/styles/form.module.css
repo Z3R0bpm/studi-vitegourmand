@@ -1,0 +1,55 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  min-width: 20vw;
+  gap: 10px;
+}
+
+.form section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form div {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  gap: 10px;
+}
+
+.form label {
+  font-size: 1em;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--text-secondary);
+}
+
+.form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--text-secondary);
+}
+
+.form button {
+  font-size: 1.2em;
+  font-weight: 600;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--text-secondary);
+  background-color: var(--button-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.form p a {
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-decoration: underline;
+}

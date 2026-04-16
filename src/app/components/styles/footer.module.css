@@ -1,0 +1,86 @@
+.companyInformation {
+  padding: 8px;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.openingDays {
+  padding: 8px;
+  gap: 8px 50px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-height: 30vh;
+  color: var(--footer-text-seoncdary);
+}
+
+.openingHours {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.openingHours div {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.openingHours div>p {
+  justify-content: flex-end;
+}
+
+.socials {
+  gap: 8px;
+  padding: 8px;
+  flex-direction: row;
+
+  filter: opacity(0.6);
+}
+
+.mainNav {
+  padding: 8px;
+}
+
+.mainNav>ul{
+  gap: 40px;
+}
+
+.h3Link a{
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+.supportNav {
+  padding: 16px 8px;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.supportNav a {
+  color: var(--footer-text-seoncdary);
+}
+
+a.primary {
+  background: var(--text-primary);
+  color: var(--background);
+  gap: 8px;
+}
+
+a.secondary {
+  border-color: var(--button-secondary-border);
+}
+
+@media (max-width: 600px) {
+  .openingDays {
+    max-height: fit-content;
+  }
+
+  .openingHours {
+    justify-content: space-between;
+    align-self: stretch;
+  }
+
+  .mainNav ul {
+    gap: 16px;
+  }
+}

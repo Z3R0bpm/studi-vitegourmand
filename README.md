@@ -1,36 +1,99 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🍽️ Vite & Gourmand
 
-First, run the development server:
+**Vite & Gourmand** est une application web de **commande de plats traiteur haut de gamme**, conçue pour offrir une **expérience utilisateur fluide, moderne et élégante**.  
+Grâce à une interface épurée et performante, les utilisateurs peuvent découvrir, personnaliser et commander des plats d’exception en toute simplicité.
+
+---
+
+## 🚀 Aperçu du projet
+
+- 🧭 **Interface moderne** — design clair et agréable, adapté aux mobiles et tablettes.
+- ⚡ **Performances optimisées** — rendu serveur côté Next.js et hydration rapide grâce à React 19.
+- 🍽️ **Catalogue dynamique** — plats filtrables par catégorie, saison ou préférences alimentaires.
+- 💳 **Commande fluide** — ajout au panier, validation et suivi en temps réel.
+- 🌙 **Mode clair/sombre** — basculement automatique ou manuel via _next-themes_.
+- 🧑‍🍳 **Espace traiteur** (optionnel) — gestion des plats, commandes et clients.
+
+---
+
+## 🛠️ Stack technique
+
+- **Framework :** [Next.js 16](https://nextjs.org/) (App Router)
+- **UI :** [React 19](https://react.dev/) + [Geist UI](https://geist-ui.dev/)
+- **Langage :** [TypeScript](https://www.typescriptlang.org/)
+- **Styles :** CSS global + modules, gestion du thème via [next-themes](https://github.com/pacocoursey/next-themes)
+- **Linting & Qualité :** ESLint flat config + eslint-config-next
+- **Base de données :** [PlanetScale](https://planetscale.com/) (MySQL)
+- **ORM :** [Prisma](https://www.prisma.io/)
+- **Hébergement :** Vercel (ou tout service compatible Next.js)
+
+---
+
+## ⚙️ Installation & exécution
 
 ```bash
+# 1️⃣ Cloner le dépôt
+git clone https://github.com/<ton-utilisateur>/vite-et-gourmand.git
+
+# 2️⃣ Accéder au dossier
+cd vite-et-gourmand
+
+# 3️⃣ Installer les dépendances
+npm install
+
+# 4️⃣ Configurer les variables d’environnement
+cp .env.example .env.local
+# Ensuite, renseigne les valeurs (Base de données PlanetScale, etc.)
+
+# 5️⃣ Lancer le projet en développement
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Une fois démarré, rends-toi sur 👉 [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧩 Structure du projet
 
-## Learn More
+vite-et-gourmand/
+├── app/ → Routage et pages principales (App Router)
+├── components/ → Composants UI réutilisables
+├── lib/ → Utilitaires et configuration Prisma
+├── prisma/ → Schéma et migrations de la base de données
+├── public/ → Images, icônes, favicon…
+├── styles/ → Feuilles de style globales et modules CSS
+├── eslint.config.mjs → Configuration ESLint
+├── tsconfig.json → Configuration TypeScript
+└── next.config.mjs → Configuration Next.js
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 💾 Base de données
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Le projet utilise **PlanetScale (MySQL)** pour une base scalable et sans downtime.  
+L’accès se fait via **Prisma**, ce qui facilite la gestion du schéma avec la commande :
 
-## Deploy on Vercel
+```bash
+npx prisma migrate dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+et l’inspection du modèle :
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx prisma studio
+```
+
+---
+
+## 🎨 Aperçu visuel
+
+_TBD_  
+![Vite & Gourmand UI Preview](source)
+
+---
+
+## 📜 Licence
+
+Ce projet est distribué sous licence **MIT**.

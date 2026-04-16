@@ -1,0 +1,30 @@
+.page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-geist-sans);
+  background-color: var(--background);
+  color: var(--text-primary);
+  transition: 1s;
+}
+
+.page p {
+  z-index: 10;
+}
+
+.page a {
+  font-weight: bold;
+}
+
+.notFound {
+  position: absolute;
+  left: auto;
+  top: auto;
+  font-size: 25vw;
+  font-weight: bold;
+
+  filter: opacity(0.2);
+}
