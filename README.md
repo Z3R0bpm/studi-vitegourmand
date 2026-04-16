@@ -14,7 +14,7 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 - 🍽️ **Catalogue dynamique** — plats filtrables par catégorie, saison ou préférences alimentaires.
 - 💳 **Commande fluide** — ajout au panier, validation et suivi en temps réel.
 - 🌙 **Mode clair/sombre** — basculement automatique ou manuel via _next-themes_.
-- 🧑‍🍳 **Espace traiteur** (optionnel) — gestion des plats, commandes et clients.
+- 🧑‍🍳 **Espace traiteur** — gestion des plats, commandes et clients.
 
 ---
 
@@ -27,7 +27,7 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 - **Linting & Qualité :** ESLint flat config + eslint-config-next
 - **Base de données :** [PlanetScale](https://planetscale.com/) (MySQL)
 - **ORM :** [Prisma](https://www.prisma.io/)
-- **Hébergement :** Vercel (ou tout service compatible Next.js)
+- **Hébergement :** Vercel
 
 ---
 
