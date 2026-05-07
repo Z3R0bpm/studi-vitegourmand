@@ -25,7 +25,7 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 - **Langage :** [TypeScript](https://www.typescriptlang.org/)
 - **Styles :** CSS global + modules, gestion du thème via [next-themes](https://github.com/pacocoursey/next-themes)
 - **Linting & Qualité :** ESLint flat config + eslint-config-next
-- **Base de données :** [PlanetScale](https://planetscale.com/) (MySQL)
+- **Base de données :** [MySQL]() (TBD)
 - **ORM :** [Prisma](https://www.prisma.io/)
 - **Hébergement :** Vercel
 
