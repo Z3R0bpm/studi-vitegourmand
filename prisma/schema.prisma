@@ -112,7 +112,7 @@ model reviews {
 }
 
 model roles {
-  id    Int     @id @default(autoincrement())
+  id    Int     @id
   label String  @db.VarChar(50)
   users users[]
 }
@@ -124,18 +124,19 @@ model themes {
 }
 
 model users {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique(map: "email") @db.VarChar(255)
-  password String    @db.VarChar(50)
-  username String    @db.VarChar(50)
-  phone    String?   @db.VarChar(50)
-  city     String?   @db.VarChar(50)
-  country  String?   @db.VarChar(50)
-  address  String?   @db.VarChar(50)
-  role_id  Int
-  orders   orders[]
-  reviews  reviews[]
-  roles    roles     @relation(fields: [role_id], references: [id], map: "fk_users_role")
+  id        Int       @id @default(autoincrement())
+  email     String    @unique(map: "email") @db.VarChar(255)
+  password  String    @db.VarChar(60)
+  phone     String?   @db.VarChar(50)
+  city      String?   @db.VarChar(50)
+  country   String?   @db.VarChar(50)
+  address   String?   @db.VarChar(50)
+  role_id   Int
+  firstname String    @db.VarChar(50)
+  lastname  String    @db.VarChar(50)
+  orders    orders[]
+  reviews   reviews[]
+  roles     roles     @relation(fields: [role_id], references: [id], map: "fk_users_role")
 
   @@index([role_id], map: "fk_users_role")
 }

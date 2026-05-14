@@ -27,6 +27,5 @@ export default async function checkPasswordStrength(password: string) {
   strength += /[!@#$%^&*+_=]/.test(password) ? 1 : 0
   if (strength <= 2) return PasswordStrengths.Weak
   if (strength === 3) return PasswordStrengths.Medium
-  console.log("strong")
   return PasswordStrengths.Strong
 }

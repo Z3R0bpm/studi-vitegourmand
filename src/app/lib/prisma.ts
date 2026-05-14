@@ -1,4 +1,5 @@
 import { PrismaMariaDb } from "@prisma/adapter-mariadb"
+import { prismaQueryInsights } from "@prisma/sqlcommenter-query-insights"
 import "dotenv/config"
 import { PrismaClient } from "../../../generated/prisma/client"
 
@@ -10,6 +11,6 @@ const adapter = new PrismaMariaDb({
   connectionLimit: 5,
 })
 
-const prisma = new PrismaClient({ adapter })
+const prisma = new PrismaClient({ adapter, comments: [prismaQueryInsights()] })
 
 export { prisma }

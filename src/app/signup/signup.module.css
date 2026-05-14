@@ -6,3 +6,9 @@
   font-size: 0.8em;
   max-width: 30vw;
 }
+
+.error {
+  color: red;
+  font-size: 1em;
+  max-width: 30vw;
+}
