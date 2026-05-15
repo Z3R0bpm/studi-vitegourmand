@@ -1,3 +1,4 @@
+"use client"
 import { useSession } from "../hooks/useSession"
 
 export function Header() {

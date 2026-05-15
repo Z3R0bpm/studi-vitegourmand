@@ -2,7 +2,13 @@ import jwt, { Secret } from "jsonwebtoken"
 import { cookies } from "next/headers"
 import "server-only"
 
-const secret: Secret = process.env.SESSION_SECRET!
+const sessionSecret = process.env.SESSION_SECRET
+if (!sessionSecret) {
+  throw new Error(
+    "SESSION_SECRET is not set. Configure SESSION_SECRET before starting the application.",
+  )
+}
+const secret: Secret = sessionSecret
 
 async function createSession(userId: number) {
   const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)

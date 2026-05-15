@@ -60,7 +60,7 @@ export default function LogIn() {
           <p>
             Vous n'avez pas de compte ? <a href="/signup">Inscription</a>
           </p>
-          {state?.error && <p className={styles.error}>{state.error}</p>}
+          {state && <p className={styles.error}>{state.error}</p>}
         </Form>
       </main>
       <Footer />

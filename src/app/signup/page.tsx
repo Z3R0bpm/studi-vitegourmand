@@ -14,7 +14,7 @@ export default function SignUp() {
 
   const [state, formAction] = useActionState(signupAction, undefined)
 
-  const debouncedTestPassword = debounce(testPassword, 500)
+  const debouncedTestPassword = debounce(testPassword, 500) //https://github.com/Z3R0bpm/studi-vitegourmand/pull/2#discussion_r3243374483
 
   const isPasswordValid = async (password: string) => {
     const passwordStrength = debouncedTestPassword(password)
@@ -129,7 +129,7 @@ export default function SignUp() {
           </p>
           {(passwordStrength === 0 && (
             <p className={styles.passwordStrength} style={{ color: "red" }}>
-              Votre mot de passe doit contenir entre 8 et 32 caractères.
+              Votre mot de passe doit contenir entre 10 et 32 caractères.
             </p>
           )) ||
             (passwordStrength < 4 && (

@@ -11,16 +11,17 @@ const sanitizeEmail = (email: string) =>
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9@._+-]/g, "")
-const sanitizePassword = (password: string) =>
-  password.trim().replace(/[^a-zA-Z0-9!@#$%^&*()_+\-=;':",.<>?]/g, "")
 const sanitizeString = (string: string) =>
   string.trim().replace(/[^a-zA-Z0-9éèêëàâäîïôöùûüç\s]/g, "")
 const sanitizePhoneNumber = (phoneNumber: string) =>
-  phoneNumber.trim().replace(/[^0-9]/g, "")
+  phoneNumber.trim().replace(/[^0-9+]/g, "")
 
-export async function login(prevState: any, formData: FormData) {
+export async function login(
+  prevState: { error: string } | undefined,
+  formData: FormData,
+) {
   const email = sanitizeEmail(formData.get("email") as string)
-  const password = sanitizePassword(formData.get("password") as string)
+  const password = formData.get("password") as string
   if (!email.includes("@") || email.length > 255 || email.length < 3) {
     return { error: "L'adresse email est invalide" as string }
   }
@@ -40,7 +41,10 @@ export async function login(prevState: any, formData: FormData) {
   }
 }
 
-export async function signup(prevState: any, formData: FormData) {
+export async function signup(
+  prevState: { error: string } | undefined,
+  formData: FormData,
+) {
   const firstName = sanitizeString(formData.get("firstName") as string)
   const lastName = sanitizeString(formData.get("lastName") as string)
   const email = sanitizeEmail(formData.get("email") as string)
@@ -48,13 +52,16 @@ export async function signup(prevState: any, formData: FormData) {
   const address = sanitizeString(formData.get("address") as string)
   const city = sanitizeString(formData.get("city") as string)
   const country = sanitizeString(formData.get("country") as string)
-  const password = sanitizePassword(formData.get("password") as string)
+  const password = formData.get("password") as string
 
   if (!email.includes("@") || email.length > 255 || email.length < 3) {
     return { error: "L'adresse email est invalide" as string }
   }
-  if (password.length < 8 || password.length > 32) {
+  if (password.length < 10 || password.length > 32) {
     return { error: "Le mot de passe est invalide" as string }
+  }
+  if ((await checkPasswordStrength(password)) < 1) {
+    return { error: "Le mot de passe est trop faible" as string }
   }
   if (firstName.length < 2 || firstName.length > 50) {
     return { error: "Le prénom est invalide" as string }
