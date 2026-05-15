@@ -13,7 +13,6 @@ export default function NotFound() {
         router.replace("/") // or router.push('/') for history push
       } else {
         setCountdown((prev) => prev - 1)
-        console.log(countdown)
       }
     }, 1000)
 

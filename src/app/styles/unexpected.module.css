@@ -17,6 +17,7 @@
 
 .page a {
   font-weight: bold;
+  text-decoration: underline;
 }
 
 .notFound {

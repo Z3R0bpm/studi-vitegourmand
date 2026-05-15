@@ -1,52 +1,49 @@
 "use client"
-import { useState } from "react"
-import { testPassword } from "../actions"
+import { redirect } from "next/navigation"
+import { useActionState, useState } from "react"
+import { signup as signupAction, testPassword } from "../actions"
 import { Footer } from "../components/Footer"
 import Form from "../components/Form"
 import { Header } from "../components/Header"
+import { useSession } from "../hooks/useSession"
 import debounce from "../utils/debounce"
 import styles from "./signup.module.css"
 
 export default function SignUp() {
   const [passwordStrength, setPasswordStrength] = useState<number>(0)
 
-  const signUp = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-    const formData = new FormData(event.target as HTMLFormElement)
-    const firstName = formData.get("firstName") as string
-    const lastName = formData.get("lastName") as string
-    const email = formData.get("email") as string
-    const phoneNumber = formData.get("phoneNumber") as string
-    const address = formData.get("address") as string
-    const password = formData.get("password") as string
-    const CGV = formData.get("CGV")
-    const legals = formData.get("legals") as string
-    console.log(
-      "firsName : " + firstName,
-      "lastName : " + lastName,
-      "email : " + email,
-      "phoneNumber : " + phoneNumber,
-      "address : " + address,
-      "password : " + password,
-      "CGV accepted : " + CGV === "on",
-      "legals accepted : " + legals === "on",
-    )
-  }
+  const [state, formAction] = useActionState(signupAction, undefined)
 
-  const debouncedTestPassword = debounce(testPassword, 500)
+  const debouncedTestPassword = debounce(testPassword, 500) //https://github.com/Z3R0bpm/studi-vitegourmand/pull/2#discussion_r3243374483
 
   const isPasswordValid = async (password: string) => {
     const passwordStrength = debouncedTestPassword(password)
     setPasswordStrength(await passwordStrength)
-    console.log(passwordStrength)
   }
 
+  const [showPassword, setShowPassword] = useState(false)
+  const togglePasswordVisibility = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setShowPassword(event.target.checked)
+  }
+
+  const { session, loading } = useSession()
+  if (loading)
+    return (
+      <div className="page">
+        <div style={{ textAlign: "center", fontSize: "5em" }}>Loading...</div>
+      </div>
+    )
+  if (session) redirect("/")
   return (
     <div className="page">
       <Header />
       <main className="main">
-        <Form onSubmit={signUp} submitText="S'inscrire" className={styles.form}>
+        <Form
+          formAction={formAction}
+          submitText="S'inscrire"
+          className={styles.form}>
           <section>
             <div>
               <label htmlFor="firstName">Prénom *</label>
@@ -81,7 +78,7 @@ export default function SignUp() {
             autoComplete="email"
             required
           />
-          <label htmlFor="phoneNumber">Numéro de téléphone *</label>
+          <label htmlFor="phoneNumber">Numéro de téléphone</label>
           <input
             type="tel"
             id="phoneNumber"
@@ -89,7 +86,6 @@ export default function SignUp() {
             placeholder="06XXXXXXXX"
             maxLength={20}
             autoComplete="tel"
-            required
           />
           <label htmlFor="address">Adresse</label>
           <textarea
@@ -99,9 +95,27 @@ export default function SignUp() {
             maxLength={150}
             autoComplete="shipping street-address"
           />
+          <label htmlFor="city">Ville</label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            placeholder="33000, Bordeaux"
+            maxLength={50}
+            autoComplete="shipping locality"
+          />
+          <label htmlFor="country">Pays</label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            placeholder="France"
+            maxLength={50}
+            autoComplete="shipping country"
+          />
           <label htmlFor="password">Mot de passe *</label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             name="password"
             onChange={(e) => isPasswordValid(e.target.value)}
@@ -109,9 +123,13 @@ export default function SignUp() {
             autoComplete="new-password"
             required
           />
+          <p>
+            <input type="checkbox" onChange={togglePasswordVisibility}></input>{" "}
+            Afficher le mot de passe
+          </p>
           {(passwordStrength === 0 && (
             <p className={styles.passwordStrength} style={{ color: "red" }}>
-              Votre mot de passe doit contenir entre 8 et 32 caractères.
+              Votre mot de passe doit contenir entre 10 et 32 caractères.
             </p>
           )) ||
             (passwordStrength < 4 && (
@@ -133,9 +151,10 @@ export default function SignUp() {
             et j'approuve les <a href="/CGV">condition générales de ventes</a>
           </p>
           <p>
-            <input type="checkbox" id="legals" name="legals"></input> J'ai lu et
-            j'approuve les <a href="/legals">mentions légales</a>
+            <input type="checkbox" id="legals" name="legals" required></input>{" "}
+            J'ai lu et j'approuve les <a href="/legals">mentions légales</a>
           </p>
+          {state && <p className={styles.error}>{state.error}</p>}
         </Form>
       </main>
       <Footer />
