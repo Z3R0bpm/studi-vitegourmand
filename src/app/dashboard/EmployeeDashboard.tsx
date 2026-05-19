@@ -12,7 +12,9 @@ export async function EmployeeDashboard() {
 
   return (
     <main className={`main ${styles.dashboard}`}>
-      <h1 className={styles.sectionTitle}>Tableau de bord employé</h1>
+      <h1 className={styles.sectionTitle}>
+        Tableau de bord {isAdmin ? "administrateur" : "employé"}
+      </h1>
       <EmployeeTabs
         showAdminTab={isAdmin}
         adminContent={

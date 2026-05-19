@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 
 export const useSession = () => {
   const [session, setSession] = useState<number | null>(null)
+  const [roleId, setRoleId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -9,6 +10,7 @@ export const useSession = () => {
       .then((response) => response.json())
       .then((data) => {
         setSession(data.userId)
+        setRoleId(data.roleId ?? null)
         setLoading(false)
       })
       .catch((error) => {
@@ -17,5 +19,5 @@ export const useSession = () => {
       })
   }, [])
 
-  return { session, loading }
+  return { session, roleId, loading }
 }

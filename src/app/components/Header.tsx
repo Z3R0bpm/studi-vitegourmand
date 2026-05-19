@@ -2,7 +2,10 @@
 import { useSession } from "../hooks/useSession"
 
 export function Header() {
-  const { session, loading } = useSession()
+  const { session, roleId, loading } = useSession()
+  const dashboardLabel =
+    roleId !== null && roleId >= 1 ? "Tableau de bord" : "Profil"
+
   return (
     <header>
       <a href="/">
@@ -23,7 +26,7 @@ export function Header() {
           </li>
           {session && (
             <li>
-              <a href="/dashboard">Mon profil</a>
+              <a href="/dashboard">{dashboardLabel}</a>
             </li>
           )}
           {session && (
