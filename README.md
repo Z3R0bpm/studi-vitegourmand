@@ -35,7 +35,7 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 
 ```bash
 # 1️⃣ Cloner le dépôt
-git clone https://github.com/<ton-utilisateur>/vite-et-gourmand.git
+git clone https://github.com/Z3R0bpm/studi-vitegourmand.git
 
 # 2️⃣ Accéder au dossier
 cd vite-et-gourmand
