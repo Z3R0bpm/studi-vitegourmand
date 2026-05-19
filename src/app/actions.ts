@@ -3,6 +3,7 @@
 
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
+import { isDishType } from "./dashboard/dishTypes"
 import {
   getUserById,
   login as loginAuth,
@@ -19,7 +20,6 @@ import {
   getUserOrders,
   searchUsers,
 } from "./lib/db"
-import { isDishType } from "./dashboard/dishTypes"
 import { parseDishPictureFromForm } from "./lib/dishPicture"
 import checkPasswordStrength from "./lib/passwordTester"
 import { prisma } from "./lib/prisma"
@@ -44,7 +44,7 @@ const isValidPassword = (password: string) => {
   return true
 }
 const isValidEmail = (email: string) => {
-  const escapeCharacters = /[!#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+  const escapeCharacters = /[()\[\];:"\,<>]/
   if (escapeCharacters.test(email)) {
     return false
   }
@@ -201,7 +201,15 @@ export async function getEmployeeDashboardData() {
     getMenuFormOptions(),
     isAdmin ? getRoles() : Promise.resolve([]),
   ])
-  return { orders, menus, dishes, formOptions, isAdmin, roles, currentUserId: user.id }
+  return {
+    orders,
+    menus,
+    dishes,
+    formOptions,
+    isAdmin,
+    roles,
+    currentUserId: user.id,
+  }
 }
 
 export async function searchUsersAction(query: string) {
@@ -222,7 +230,9 @@ export async function updateUserRole(
   }
 
   if (userId === admin.id && roleId < 2) {
-    return { error: "Vous ne pouvez pas retirer votre propre accès administrateur" }
+    return {
+      error: "Vous ne pouvez pas retirer votre propre accès administrateur",
+    }
   }
 
   const role = await prisma.roles.findUnique({ where: { id: roleId } })

@@ -16,14 +16,14 @@ export function Header() {
           <li>
             <a href="/menus">Menus</a>
           </li>
+          <li>
+            <a href="/contact">Contact</a>
+          </li>
           {!session && (
             <li>
               <a href="/login">Connexion</a>
             </li>
           )}
-          <li>
-            <a href="/contact">Contact</a>
-          </li>
           {session && (
             <li>
               <a href="/dashboard">{dashboardLabel}</a>
