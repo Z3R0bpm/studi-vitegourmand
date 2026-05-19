@@ -1,5 +1,6 @@
 //database actions
 import "server-only"
+import { DISH_TYPE_ORDER } from "../dashboard/dishTypes"
 import { prisma } from "./prisma"
 
 function formatDate(date: Date) {
@@ -176,14 +177,11 @@ async function getRoles() {
   const roles = await prisma.roles.findMany({ orderBy: { id: "asc" } })
   return roles.map((role) => ({ id: role.id, label: role.label }))
 }
-
-const DISH_TYPE_SORT = ["starter", "main", "dessert"] as const
-
 function sortDishesForCarousel<T extends { dishType: string }>(dishes: T[]) {
   return [...dishes].sort(
     (a, b) =>
-      DISH_TYPE_SORT.indexOf(a.dishType as (typeof DISH_TYPE_SORT)[number]) -
-      DISH_TYPE_SORT.indexOf(b.dishType as (typeof DISH_TYPE_SORT)[number]),
+      DISH_TYPE_ORDER.indexOf(a.dishType as (typeof DISH_TYPE_ORDER)[number]) -
+      DISH_TYPE_ORDER.indexOf(b.dishType as (typeof DISH_TYPE_ORDER)[number]),
   )
 }
 

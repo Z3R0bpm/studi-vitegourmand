@@ -4,6 +4,7 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { isDishType } from "./dashboard/dishTypes"
+import { ORDER_STATUSES } from "./dashboard/status"
 import {
   getUserById,
   login as loginAuth,
@@ -34,11 +35,10 @@ const sanitizePhoneNumber = (phoneNumber: string) =>
 const isValidPassword = (password: string) => {
   const MIN_LENGTH = 10
   const MAX_LENGTH = 32
-  const escapeCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
   if (password.length < MIN_LENGTH || password.length > MAX_LENGTH) {
     return false
   }
-  if (escapeCharacters.test(password)) {
+  if (/[\p{C}]/u.test(password)) {
     return false
   }
   return true
@@ -60,12 +60,15 @@ export async function login(
   formData: FormData,
 ) {
   const email = sanitizeEmail(formData.get("email") as string)
-  const password = formData.get("password") as string
+  const password = (formData.get("password") as string).normalize("NFC")
   if (!email.includes("@") || email.length > 255 || email.length < 3) {
-    return { error: "L'adresse email est invalide" as string }
+    return { error: "L'adresse email est invalide" }
   }
-  if (password.length < 8 || password.length > 32) {
-    return { error: "Le mot de passe est invalide" as string }
+  if (!isValidEmail(email)) {
+    return { error: "L'adresse email est invalide" }
+  }
+  if (!isValidPassword(password)) {
+    return { error: "Le mot de passe est invalide" }
   }
   const user = await loginAuth(email, password)
   if (!user) {
@@ -91,7 +94,7 @@ export async function signup(
   const address = sanitizeString(formData.get("address") as string)
   const city = sanitizeString(formData.get("city") as string)
   const country = sanitizeString(formData.get("country") as string)
-  const password = formData.get("password") as string
+  const password = (formData.get("password") as string).normalize("NFC")
 
   if (!email.includes("@") || email.length > 255 || email.length < 3) {
     return { error: "L'adresse email est invalide" as string }
@@ -99,7 +102,7 @@ export async function signup(
   if (!isValidEmail(email)) {
     return { error: "L'adresse email est invalide" as string }
   }
-  if (password.length < 10 || password.length > 32) {
+  if (!isValidPassword(password)) {
     return { error: "Le mot de passe est invalide" as string }
   }
   if ((await checkPasswordStrength(password)) < 1) {
@@ -327,14 +330,6 @@ export async function updateUserRole(
   return { success: true }
 }
 
-const ORDER_STATUSES = [
-  "On hold",
-  "Confirmed",
-  "In preparation",
-  "Delivered",
-  "Cancelled",
-] as const
-
 export async function updateOrderStatus(
   _prev: { error?: string; success?: boolean } | undefined,
   formData: FormData,
@@ -460,13 +455,13 @@ export async function saveDish(
 
   const pictureData =
     pictureResult.picture !== undefined
-      ? { picture: pictureResult.picture }
+      ? { picture: pictureResult.picture as Uint8Array<ArrayBuffer> }
       : {}
 
   if (id) {
     await prisma.dishes.update({
       where: { id },
-      data: { title, dish_type: dishTypeRaw, ...(pictureData as any) },
+      data: { title, dish_type: dishTypeRaw, ...pictureData },
     })
     await prisma.dishes_allergens.deleteMany({ where: { dish_id: id } })
     if (allergenIds.length > 0) {
@@ -476,7 +471,7 @@ export async function saveDish(
     }
   } else {
     const dish = await prisma.dishes.create({
-      data: { title, dish_type: dishTypeRaw, ...(pictureData as any) },
+      data: { title, dish_type: dishTypeRaw, ...pictureData },
     })
     if (allergenIds.length > 0) {
       await prisma.dishes_allergens.createMany({

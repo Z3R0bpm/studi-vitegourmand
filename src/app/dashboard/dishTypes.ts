@@ -13,7 +13,7 @@ export const DISH_TYPE_SINGULAR: Record<DishType, string> = {
   dessert: "Dessert",
 }
 
-export const DISH_TYPE_ORDER: DishType[] = ["starter", "main", "dessert"]
+export const DISH_TYPE_ORDER: DishType[] = [...DISH_TYPES]
 
 export function isDishType(value: string): value is DishType {
   return (DISH_TYPES as readonly string[]).includes(value)
