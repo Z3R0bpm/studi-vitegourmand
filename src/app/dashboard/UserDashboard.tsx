@@ -1,6 +1,7 @@
 import { getDashboardOrders, getUserData } from "../actions"
 import styles from "./dashboard.module.css"
 import { OrdersTable } from "./OrdersTable"
+import { UserInfoSection } from "./UserInfoSection"
 
 export async function UserDashboard() {
   const user = await getUserData()
@@ -10,37 +11,7 @@ export async function UserDashboard() {
 
   return (
     <main className={`main ${styles.dashboard}`}>
-      <section className={styles.section}>
-        <h1 className={styles.sectionTitle}>Mes informations</h1>
-        <div className={styles.infoGrid}>
-          <div className={styles.infoCard}>
-            <span className={styles.infoLabel}>Nom</span>
-            <span className={styles.infoValue}>{user.lastname}</span>
-          </div>
-          <div className={styles.infoCard}>
-            <span className={styles.infoLabel}>Prénom</span>
-            <span className={styles.infoValue}>{user.firstname}</span>
-          </div>
-          <div className={styles.infoCard}>
-            <span className={styles.infoLabel}>Email</span>
-            <span className={styles.infoValue}>{user.email}</span>
-          </div>
-          <div className={styles.infoCard}>
-            <span className={styles.infoLabel}>Téléphone</span>
-            <span className={styles.infoValue}>{user.phone || "—"}</span>
-          </div>
-          <div className={styles.infoCard}>
-            <span className={styles.infoLabel}>Adresse</span>
-            <span className={styles.infoValue}>{user.address || "—"}</span>
-          </div>
-          <div className={styles.infoCard}>
-            <span className={styles.infoLabel}>Ville</span>
-            <span className={styles.infoValue}>
-              {[user.city, user.country].filter(Boolean).join(", ") || "—"}
-            </span>
-          </div>
-        </div>
-      </section>
+      <UserInfoSection user={user} />
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>Mes commandes</h2>

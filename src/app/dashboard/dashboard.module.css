@@ -21,6 +21,28 @@
   padding-bottom: 8px;
 }
 
+.sectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+
+.sectionHeader .sectionTitle {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin: 0;
+}
+
+.profileForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
 .infoGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));

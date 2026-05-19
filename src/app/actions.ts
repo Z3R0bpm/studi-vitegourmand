@@ -182,6 +182,79 @@ export async function getUserData() {
   return userData
 }
 
+export async function updateUserProfile(
+  _prev: { error?: string; success?: boolean } | undefined,
+  formData: FormData,
+) {
+  const session = await getSession()
+  if (!session?.userId) {
+    return { error: "Vous devez être connecté" }
+  }
+
+  const firstName = sanitizeString(formData.get("firstName") as string)
+  const lastName = sanitizeString(formData.get("lastName") as string)
+  const email = sanitizeEmail(formData.get("email") as string)
+  const phoneNumber = sanitizePhoneNumber(formData.get("phoneNumber") as string)
+  const address = sanitizeString(formData.get("address") as string)
+  const city = sanitizeString(formData.get("city") as string)
+  const country = sanitizeString(formData.get("country") as string)
+
+  if (!email.includes("@") || email.length > 255 || email.length < 3) {
+    return { error: "L'adresse email est invalide" }
+  }
+  if (!isValidEmail(email)) {
+    return { error: "L'adresse email est invalide" }
+  }
+  if (firstName.length < 2 || firstName.length > 50) {
+    return { error: "Le prénom est invalide" }
+  }
+  if (lastName.length < 2 || lastName.length > 50) {
+    return { error: "Le nom est invalide" }
+  }
+  if (phoneNumber && (phoneNumber.length > 50 || phoneNumber.length < 10)) {
+    return {
+      error: "Le numéro de téléphone doit contenir au moins 10 caractères",
+    }
+  }
+  if (address && (address.length > 50 || address.length < 10)) {
+    return { error: "L'adresse doit contenir au moins 10 caractères" }
+  }
+  if (city && (city.length > 50 || city.length < 3)) {
+    return { error: "La ville doit contenir au moins 3 caractères" }
+  }
+  if (country && (country.length > 50 || country.length < 3)) {
+    return { error: "Le pays doit contenir au moins 3 caractères" }
+  }
+
+  const currentUser = await getUserById(session.userId)
+  if (!currentUser) {
+    return { error: "Utilisateur introuvable" }
+  }
+
+  if (email !== currentUser.email) {
+    const existing = await prisma.users.findUnique({ where: { email } })
+    if (existing) {
+      return { error: "Cette adresse email est déjà utilisée" }
+    }
+  }
+
+  await prisma.users.update({
+    where: { id: session.userId },
+    data: {
+      firstname: firstName,
+      lastname: lastName,
+      email,
+      phone: phoneNumber || null,
+      address: address || null,
+      city: city || null,
+      country: country || null,
+    },
+  })
+
+  revalidatePath("/dashboard")
+  return { success: true }
+}
+
 export async function getDashboardOrders() {
   const session = await getSession()
   if (!session) return []
