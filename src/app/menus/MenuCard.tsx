@@ -1,3 +1,4 @@
+"use client"
 import { getDishTypeLabel } from "../dashboard/dishTypes"
 import { DishImageCarousel, type CarouselSlide } from "./DishImageCarousel"
 import styles from "./menus.module.css"
@@ -31,7 +32,9 @@ export function MenuCard({ menu }: { menu: PublicMenu }) {
 
       <div className={styles.menuBody}>
         <h2>{menu.title}</h2>
-        {menu.description && <p className={styles.menuDescription}>{menu.description}</p>}
+        {menu.description && (
+          <p className={styles.menuDescription}>{menu.description}</p>
+        )}
 
         <div className={styles.menuMeta}>
           <span className={styles.menuTag}>{menu.theme}</span>
