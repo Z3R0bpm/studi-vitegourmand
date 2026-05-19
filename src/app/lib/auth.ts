@@ -5,6 +5,13 @@ import "server-only"
 import { prisma } from "./prisma"
 import { deleteSession, getSession } from "./session"
 
+async function getUserById(userId: number) {
+  const user = await prisma.users.findUnique({
+    where: { id: userId },
+  })
+  return user
+}
+
 async function getUserByEmail(email: string) {
   const user = await prisma.users.findUnique({
     where: { email },
@@ -68,4 +75,24 @@ async function requireAuth() {
   return user
 }
 
-export { login, logout, requireAuth, signup }
+async function requireEmployee() {
+  const user = await requireAuth()
+  if (user.role_id < 1) redirect("/dashboard")
+  return user
+}
+
+async function requireAdmin() {
+  const user = await requireAuth()
+  if (user.role_id < 2) redirect("/dashboard")
+  return user
+}
+
+export {
+  getUserById,
+  login,
+  logout,
+  requireAdmin,
+  requireAuth,
+  requireEmployee,
+  signup,
+}

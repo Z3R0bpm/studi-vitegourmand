@@ -29,7 +29,8 @@ model diets {
 model dishes {
   id               Int                @id @default(autoincrement())
   title            String             @db.VarChar(50)
-  picture          Bytes?             @db.Blob
+  dish_type        String             @default("main") @db.VarChar(50)
+  picture          Bytes?             @db.MediumBlob
   dishes_allergens dishes_allergens[]
   menus_dishes     menus_dishes[]
 }

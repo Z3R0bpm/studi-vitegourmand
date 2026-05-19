@@ -23,7 +23,7 @@ export function Header() {
           </li>
           {session && (
             <li>
-              <a href="/profile">Mon profil</a>
+              <a href="/dashboard">Mon profil</a>
             </li>
           )}
           {session && (

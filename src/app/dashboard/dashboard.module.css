@@ -1,0 +1,331 @@
+.dashboard {
+  width: 100%;
+  gap: 48px;
+  justify-content: flex-start;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sectionTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--text-secondary);
+  padding-bottom: 8px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.infoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+  background: var(--background);
+}
+
+.infoLabel {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.infoValue {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.table th,
+.table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.table th {
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.table tr:hover td {
+  background: color-mix(in srgb, var(--text-secondary) 8%, transparent);
+}
+
+.empty {
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 24px 0;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.statusOnHold {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusConfirmed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.statusInPrep {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.statusDelivered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.statusCancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--text-secondary);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.tab:hover {
+  background: color-mix(in srgb, var(--text-secondary) 15%, transparent);
+}
+
+.tabActive {
+  background: var(--text-primary);
+  color: var(--background);
+  border-color: var(--text-primary);
+}
+
+.configPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.configCard {
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.configCard h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.configMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.tag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--text-secondary);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formField label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.formField input,
+.formField select,
+.formField textarea {
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--text-secondary);
+  background: var(--background);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.formField textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.checkboxGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary,
+.btnDanger,
+.btnSecondary {
+  padding: 8px 16px;
+  border-radius: 5px;
+  border: 1px solid var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btnPrimary {
+  background: var(--text-primary);
+  color: var(--background);
+}
+
+.btnSecondary {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.btnDanger {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.85rem;
+}
+
+.success {
+  color: #059669;
+  font-size: 0.85rem;
+}
+
+.orderForm {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.orderForm select {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--text-secondary);
+  background: var(--background);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+}
+
+.dishImagePreview {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--text-secondary);
+}
+
+.dishImageField {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dishImageHint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.userRoleForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.userRoleForm select {
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--text-secondary);
+  background: var(--background);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  min-width: 160px;
+}
