@@ -19,6 +19,7 @@ import {
   getUserOrders,
   searchUsers,
 } from "./lib/db"
+import { isDishType } from "./dashboard/dishTypes"
 import { parseDishPictureFromForm } from "./lib/dishPicture"
 import checkPasswordStrength from "./lib/passwordTester"
 import { prisma } from "./lib/prisma"
@@ -355,6 +356,7 @@ export async function saveDish(
   await requireEmployee()
   const id = formData.get("id") ? Number(formData.get("id")) : null
   const title = sanitizeString(formData.get("title") as string)
+  const dishTypeRaw = formData.get("dishType") as string
   const allergenIds = formData
     .getAll("allergenIds")
     .map((v) => Number(v))
@@ -362,6 +364,10 @@ export async function saveDish(
 
   if (!title || title.length < 2) {
     return { error: "Le titre du plat est requis" }
+  }
+
+  if (!isDishType(dishTypeRaw)) {
+    return { error: "Type de plat invalide" }
   }
 
   const pictureResult = await parseDishPictureFromForm(formData)
@@ -377,7 +383,7 @@ export async function saveDish(
   if (id) {
     await prisma.dishes.update({
       where: { id },
-      data: { title, ...(pictureData as any) }, //temp fix for type error
+      data: { title, dish_type: dishTypeRaw, ...(pictureData as any) },
     })
     await prisma.dishes_allergens.deleteMany({ where: { dish_id: id } })
     if (allergenIds.length > 0) {
@@ -387,7 +393,7 @@ export async function saveDish(
     }
   } else {
     const dish = await prisma.dishes.create({
-      data: { title, ...(pictureData as any) }, //temp fix for type error
+      data: { title, dish_type: dishTypeRaw, ...(pictureData as any) },
     })
     if (allergenIds.length > 0) {
       await prisma.dishes_allergens.createMany({

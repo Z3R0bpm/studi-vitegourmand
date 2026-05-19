@@ -1,8 +1,15 @@
 "use client"
 
-import { useActionState, useState } from "react"
+import { useActionState, useMemo, useState } from "react"
 import { deleteMenu, saveMenu } from "../actions"
+import {
+  DishImageCarousel,
+  type CarouselSlide,
+} from "../menus/DishImageCarousel"
+import carouselStyles from "../menus/menus.module.css"
 import styles from "./dashboard.module.css"
+import { DishesByTypePicker } from "./DishesByTypePicker"
+import { DishSearchBar } from "./DishSearchBar"
 
 type Menu = {
   id: number
@@ -15,14 +22,19 @@ type Menu = {
   diet: string
   themeId: number
   dietId: number
-  dishes: string[]
+  dishes: {
+    starters: string[]
+    mains: string[]
+    desserts: string[]
+  }
   dishIds: number[]
+  dishSlides: CarouselSlide[]
 }
 
 type FormOptions = {
   themes: { id: number; label: string }[]
   diets: { id: number; label: string }[]
-  dishes: { id: number; label: string }[]
+  dishes: { id: number; label: string; dishType: string }[]
 }
 
 function MenuForm({
@@ -127,19 +139,11 @@ function MenuForm({
 
       <div className={styles.formField}>
         <span className={styles.infoLabel}>Plats inclus</span>
-        <div className={styles.checkboxGroup}>
-          {formOptions.dishes.map((d) => (
-            <label key={d.id} className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                name="dishIds"
-                value={d.id}
-                defaultChecked={menu?.dishIds.includes(d.id)}
-              />
-              {d.label}
-            </label>
-          ))}
-        </div>
+        <DishesByTypePicker
+          dishes={formOptions.dishes}
+          selectedIds={menu?.dishIds}
+          searchId={menu ? `menu-dishes-${menu.id}` : "menu-dishes-new"}
+        />
       </div>
 
       {state?.error && <p className={styles.error}>{state.error}</p>}
@@ -149,7 +153,10 @@ function MenuForm({
         <button type="submit" className={styles.btnPrimary} disabled={pending}>
           {pending ? "Enregistrement…" : "Enregistrer"}
         </button>
-        <button type="button" className={styles.btnSecondary} onClick={onCancel}>
+        <button
+          type="button"
+          className={styles.btnSecondary}
+          onClick={onCancel}>
           Annuler
         </button>
       </div>
@@ -171,6 +178,19 @@ function DeleteMenuButton({ id }: { id: number }) {
   )
 }
 
+function filterMenus(menus: Menu[], query: string): Menu[] {
+  const q = query.trim().toLowerCase()
+  if (!q) return menus
+  return menus.filter(
+    (menu) =>
+      menu.title.toLowerCase().includes(q) ||
+      menu.description.toLowerCase().includes(q) ||
+      menu.dishes.starters.some((d) => d.toLowerCase().includes(q)) ||
+      menu.dishes.mains.some((d) => d.toLowerCase().includes(q)) ||
+      menu.dishes.desserts.some((d) => d.toLowerCase().includes(q)),
+  )
+}
+
 export function MenusConfigSection({
   menus,
   formOptions,
@@ -180,11 +200,48 @@ export function MenusConfigSection({
 }) {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [showNew, setShowNew] = useState(false)
+  const [menuSearch, setMenuSearch] = useState("")
+  const [dishSearch, setDishSearch] = useState("")
 
   const editingMenu = menus.find((m) => m.id === editingId)
 
+  const filteredMenus = useMemo(
+    () => filterMenus(menus, menuSearch),
+    [menus, menuSearch],
+  )
+
+  const filteredMenuDishes = useMemo(() => {
+    const q = dishSearch.trim().toLowerCase()
+    if (!q) return null
+    return (dishes: {
+      starters: string[]
+      mains: string[]
+      desserts: string[]
+    }) => {
+      return {
+        starters: dishes.starters.filter((d) => d.toLowerCase().includes(q)),
+        mains: dishes.mains.filter((d) => d.toLowerCase().includes(q)),
+        desserts: dishes.desserts.filter((d) => d.toLowerCase().includes(q)),
+      }
+    }
+  }, [dishSearch])
+
   return (
     <div className={styles.configPanel}>
+      <DishSearchBar
+        id="menu-list-search"
+        value={menuSearch}
+        onChange={setMenuSearch}
+        placeholder="Rechercher un menu par titre, description…"
+      />
+
+      <DishSearchBar
+        id="menu-dish-list-search"
+        value={dishSearch}
+        onChange={setDishSearch}
+        placeholder="Rechercher un plat dans les menus…"
+      />
+
       <div className={styles.actions}>
         <button
           type="button"
@@ -212,45 +269,94 @@ export function MenusConfigSection({
         />
       )}
 
-      {menus.map((menu) => (
-        <article key={menu.id} className={styles.configCard}>
-          <h3>{menu.title}</h3>
-          <p style={{ color: "var(--text-secondary)" }}>
-            {menu.description || "Pas de description"}
-          </p>
-          <div className={styles.configMeta}>
-            <span className={styles.tag}>{menu.theme}</span>
-            <span className={styles.tag}>{menu.diet}</span>
-            <span className={styles.tag}>
-              {menu.pricePerPerson.toFixed(2)} € / pers.
-            </span>
-            <span className={styles.tag}>Min. {menu.minGroupSize} pers.</span>
-            <span className={styles.tag}>
-              {menu.available !== 0 ? "Disponible" : "Indisponible"}
-            </span>
-          </div>
-          {menu.dishes.length > 0 && (
-            <p style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>
-              Plats : {menu.dishes.join(", ")}
-            </p>
-          )}
-          <div className={styles.actions}>
-            <button
-              type="button"
-              className={styles.btnSecondary}
-              onClick={() => {
-                setEditingId(menu.id)
-                setShowNew(false)
-              }}>
-              Modifier
-            </button>
-            <DeleteMenuButton id={menu.id} />
-          </div>
-        </article>
-      ))}
+      {filteredMenus.map((menu) => {
+        const visibleDishes = filteredMenuDishes
+          ? filteredMenuDishes({
+              starters: menu.dishes.starters,
+              mains: menu.dishes.mains,
+              desserts: menu.dishes.desserts,
+            })
+          : menu.dishes
+        const totalDishes =
+          menu.dishes.starters.length +
+          menu.dishes.mains.length +
+          menu.dishes.desserts.length
+        const totalVisible =
+          visibleDishes.starters.length +
+          visibleDishes.mains.length +
+          visibleDishes.desserts.length
 
-      {menus.length === 0 && !showNew && (
-        <p className={styles.empty}>Aucun menu configuré.</p>
+        if (dishSearch.trim() && totalDishes > 0 && totalVisible === 0) {
+          return null
+        }
+
+        return (
+          <article key={menu.id} className={styles.configCard}>
+            <div className={styles.menuCardTop}>
+              <div className={styles.menuCardHeader}>
+                <h3>{menu.title}</h3>
+                <p className={styles.menuCardDescription}>
+                  {menu.description || "Pas de description"}
+                </p>
+              </div>
+              <DishImageCarousel
+                slides={menu.dishSlides}
+                className={`${carouselStyles.carouselCompact} ${styles.menuCarousel}`}
+              />
+            </div>
+            <div className={styles.configMeta}>
+              <span className={styles.tag}>{menu.theme}</span>
+              <span className={styles.tag}>{menu.diet}</span>
+              <span className={styles.tag}>
+                {menu.pricePerPerson.toFixed(2)} € / pers.
+              </span>
+              <span className={styles.tag}>Min. {menu.minGroupSize} pers.</span>
+              <span className={styles.tag}>
+                {menu.available !== 0 ? "Disponible" : "Indisponible"}
+              </span>
+            </div>
+            {visibleDishes.starters.length > 0 && (
+              <p style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>
+                Entrées : {visibleDishes.starters.join(", ")}
+              </p>
+            )}
+            {visibleDishes.mains.length > 0 && (
+              <p style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>
+                Plat principal : {visibleDishes.mains.join(", ")}
+              </p>
+            )}
+            {visibleDishes.desserts.length > 0 && (
+              <p style={{ fontSize: "0.85rem", color: "var(--text-primary)" }}>
+                Dessert : {visibleDishes.desserts.join(", ")}
+              </p>
+            )}
+            {totalDishes > 0 && totalVisible === 0 && dishSearch.trim() && (
+              <p className={styles.dishImageHint}>
+                Aucun plat de ce menu ne correspond à la recherche.
+              </p>
+            )}
+            <div className={styles.actions}>
+              <button
+                type="button"
+                className={styles.btnSecondary}
+                onClick={() => {
+                  setEditingId(menu.id)
+                  setShowNew(false)
+                }}>
+                Modifier
+              </button>
+              <DeleteMenuButton id={menu.id} />
+            </div>
+          </article>
+        )
+      })}
+
+      {filteredMenus.length === 0 && !showNew && (
+        <p className={styles.empty}>
+          {menuSearch.trim() || dishSearch.trim()
+            ? "Aucun menu ne correspond à la recherche."
+            : "Aucun menu configuré."}
+        </p>
       )}
     </div>
   )

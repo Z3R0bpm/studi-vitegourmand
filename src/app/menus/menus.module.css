@@ -1,31 +1,253 @@
-.page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-  transition: 1s;
+.menusMain {
+  gap: 48px;
+  justify-content: flex-start;
+  padding-top: 80px;
+  padding-bottom: 80px;
 }
 
-.main {
-  display: flex;
-  min-height: 100vh;
+.menusHeading {
   width: 100%;
-  max-width: 1000px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20vh;
-  background-color: var(--background);
-  padding: 120px 60px;
-  transition: 1s;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
 }
 
-.menusList p{
+.menusEmpty {
+  width: 100%;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.menusList {
   display: flex;
-  justify-content: center;
-  font-size: 2em;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--text-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--background);
+}
+
+.menuBody {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 24px;
+}
+
+.menuBody h2 {
+  font-size: 1.5rem;
   color: var(--text-primary);
+}
+
+.menuDescription {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.menuMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.menuTag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--text-secondary);
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.menuDishes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  padding-left: 0;
+  list-style: none;
+}
+
+.menuDishes strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 320px;
+  background: color-mix(in srgb, var(--text-secondary) 12%, transparent);
+}
+
+.carouselImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carouselCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  color: #fff;
+}
+
+.carouselDishTitle {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.carouselDishType {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.carouselControl {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.carouselControl:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.carouselPrev {
+  left: 12px;
+}
+
+.carouselNext {
+  right: 12px;
+}
+
+.carouselDots {
+  position: absolute;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.carouselDot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+}
+
+.carouselDotActive {
+  background: #fff;
+  width: 20px;
+}
+
+.carouselCompact {
+  width: 132px;
+  max-height: 99px;
+  aspect-ratio: 4 / 3;
+  flex-shrink: 0;
+}
+
+.carouselCompact .carouselCaption {
+  padding: 4px 6px;
+}
+
+.carouselCompact .carouselDishTitle {
+  font-size: 0.65rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carouselCompact .carouselDishType {
+  display: none;
+}
+
+.carouselCompact .carouselControl {
+  width: 22px;
+  height: 22px;
+  font-size: 1rem;
+}
+
+.carouselCompact .carouselPrev {
+  left: 4px;
+}
+
+.carouselCompact .carouselNext {
+  right: 4px;
+}
+
+.carouselCompact .carouselDots {
+  bottom: 22px;
+  gap: 4px;
+}
+
+.carouselCompact .carouselDot {
+  width: 5px;
+  height: 5px;
+}
+
+.carouselCompact .carouselDotActive {
+  width: 10px;
+}
+
+.inlineFlex {
+  display: inline-flex;
+  gap: 8px;
+}
+
+@media (min-width: 700px) {
+  .menu {
+    flex-direction: row;
+  }
+
+  .carousel {
+    width: 42%;
+    max-width: 380px;
+    flex-shrink: 0;
+    max-height: none;
+    aspect-ratio: 4 / 3;
+  }
+
+  .menuBody {
+    flex: 1;
+    justify-content: center;
+  }
 }

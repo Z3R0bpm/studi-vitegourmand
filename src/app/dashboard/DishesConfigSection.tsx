@@ -1,13 +1,24 @@
 "use client"
 
 import Image from "next/image"
-import { useActionState, useEffect, useState } from "react"
+import { useActionState, useEffect, useMemo, useState } from "react"
 import { deleteDish, saveDish } from "../actions"
 import styles from "./dashboard.module.css"
+import { DishSearchBar } from "./DishSearchBar"
+import {
+  DISH_TYPE_LABELS,
+  DISH_TYPE_ORDER,
+  DISH_TYPES,
+  type DishType,
+  filterBySearch,
+  getDishTypeLabel,
+  groupByDishType,
+} from "./dishTypes"
 
 type Dish = {
   id: number
   title: string
+  dishType: string
   hasPicture: boolean
   allergens: string[]
   allergenIds: number[]
@@ -67,20 +78,41 @@ function DishForm({
     }
   }
 
+  const defaultType =
+    dish?.dishType && DISH_TYPES.includes(dish.dishType as DishType)
+      ? dish.dishType
+      : "main"
+
   return (
     <form action={formAction} className={styles.configCard}>
       {dish && <input type="hidden" name="id" value={dish.id} />}
       <h3>{dish ? `Modifier : ${dish.title}` : "Nouveau plat"}</h3>
 
-      <div className={styles.formField}>
-        <label htmlFor="dish-title">Titre</label>
-        <input
-          id="dish-title"
-          name="title"
-          defaultValue={dish?.title}
-          required
-          maxLength={50}
-        />
+      <div className={styles.formGrid}>
+        <div className={styles.formField}>
+          <label htmlFor="dish-title">Titre</label>
+          <input
+            id="dish-title"
+            name="title"
+            defaultValue={dish?.title}
+            required
+            maxLength={50}
+          />
+        </div>
+        <div className={styles.formField}>
+          <label htmlFor="dish-type">Type</label>
+          <select
+            id="dish-type"
+            name="dishType"
+            defaultValue={defaultType}
+            required>
+            {DISH_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {getDishTypeLabel(type)}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className={`${styles.formField} ${styles.dishImageField}`}>
@@ -165,6 +197,49 @@ function DeleteDishButton({ id }: { id: number }) {
   )
 }
 
+function DishCard({ dish, onEdit }: { dish: Dish; onEdit: () => void }) {
+  return (
+    <article className={styles.configCard}>
+      <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
+        {dish.hasPicture && (
+          <Image
+            src={dishPictureUrl(dish.id)}
+            alt={dish.title}
+            width={120}
+            height={90}
+            className={styles.dishImagePreview}
+            style={{ maxWidth: 120 }}
+            unoptimized
+          />
+        )}
+        <div style={{ flex: 1 }}>
+          <h3>{dish.title}</h3>
+          <div className={styles.configMeta}>
+            <span className={styles.tag}>
+              {getDishTypeLabel(dish.dishType)}
+            </span>
+            {dish.allergens.length > 0 ? (
+              dish.allergens.map((a) => (
+                <span key={a} className={styles.tag}>
+                  {a}
+                </span>
+              ))
+            ) : (
+              <span className={styles.tag}>Aucun allergène</span>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className={styles.actions}>
+        <button type="button" className={styles.btnSecondary} onClick={onEdit}>
+          Modifier
+        </button>
+        <DeleteDishButton id={dish.id} />
+      </div>
+    </article>
+  )
+}
+
 export function DishesConfigSection({
   dishes,
   formOptions,
@@ -174,11 +249,36 @@ export function DishesConfigSection({
 }) {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [showNew, setShowNew] = useState(false)
+  const [search, setSearch] = useState("")
 
   const editingDish = dishes.find((d) => d.id === editingId)
 
+  const searchableDishes = useMemo(
+    () => dishes.map((d) => ({ ...d, label: d.title })),
+    [dishes],
+  )
+
+  const filteredDishes = useMemo(
+    () => filterBySearch(searchableDishes, search),
+    [searchableDishes, search],
+  )
+
+  const groupedDishes = useMemo(
+    () => groupByDishType(filteredDishes),
+    [filteredDishes],
+  )
+
+  const hasResults = filteredDishes.length > 0
+
   return (
     <div className={styles.configPanel}>
+      <DishSearchBar
+        id="dish-list-search"
+        value={search}
+        onChange={setSearch}
+        placeholder="Rechercher un plat par nom…"
+      />
+
       <div className={styles.actions}>
         <button
           type="button"
@@ -206,53 +306,32 @@ export function DishesConfigSection({
         />
       )}
 
-      {dishes.map((dish) => (
-        <article key={dish.id} className={styles.configCard}>
-          <div
-            style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
-            {dish.hasPicture && (
-              <Image
-                src={dishPictureUrl(dish.id)}
-                alt={dish.title}
-                width={120}
-                height={90}
-                className={styles.dishImagePreview}
-                style={{ maxWidth: 120 }}
-                unoptimized
+      {DISH_TYPE_ORDER.map((type) => {
+        const typeDishes = groupedDishes[type]
+        if (typeDishes.length === 0) return null
+        return (
+          <section key={type} className={styles.dishTypeSection}>
+            <h2 className={styles.dishTypeHeading}>{DISH_TYPE_LABELS[type]}</h2>
+            {typeDishes.map((dish) => (
+              <DishCard
+                key={dish.id}
+                dish={dish}
+                onEdit={() => {
+                  setEditingId(dish.id)
+                  setShowNew(false)
+                }}
               />
-            )}
-            <div style={{ flex: 1 }}>
-              <h3>{dish.title}</h3>
-              <div className={styles.configMeta}>
-                {dish.allergens.length > 0 ? (
-                  dish.allergens.map((a) => (
-                    <span key={a} className={styles.tag}>
-                      {a}
-                    </span>
-                  ))
-                ) : (
-                  <span className={styles.tag}>Aucun allergène</span>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className={styles.actions}>
-            <button
-              type="button"
-              className={styles.btnSecondary}
-              onClick={() => {
-                setEditingId(dish.id)
-                setShowNew(false)
-              }}>
-              Modifier
-            </button>
-            <DeleteDishButton id={dish.id} />
-          </div>
-        </article>
-      ))}
+            ))}
+          </section>
+        )
+      })}
 
-      {dishes.length === 0 && !showNew && (
-        <p className={styles.empty}>Aucun plat configuré.</p>
+      {!hasResults && !showNew && (
+        <p className={styles.empty}>
+          {search.trim()
+            ? "Aucun plat ne correspond à la recherche."
+            : "Aucun plat configuré."}
+        </p>
       )}
     </div>
   )
