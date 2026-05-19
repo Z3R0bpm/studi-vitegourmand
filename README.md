@@ -25,7 +25,7 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 - **Langage :** [TypeScript](https://www.typescriptlang.org/)
 - **Styles :** CSS global + modules, gestion du thème via [next-themes](https://github.com/pacocoursey/next-themes)
 - **Linting & Qualité :** ESLint flat config + eslint-config-next
-- **Base de données :** [PlanetScale](https://planetscale.com/) (MySQL)
+- **Base de données :** [MySQL]() (MySQL)
 - **ORM :** [Prisma](https://www.prisma.io/)
 - **Hébergement :** Vercel
 
@@ -45,7 +45,7 @@ npm install
 
 # 4️⃣ Configurer les variables d’environnement
 cp .env.example .env.local
-# Ensuite, renseigne les valeurs (Base de données PlanetScale, etc.)
+# Ensuite, renseigne les valeurs (Base de données MySQL, etc.)
 
 # 5️⃣ Lancer le projet en développement
 npm run dev
@@ -57,7 +57,7 @@ Une fois démarré, rends-toi sur 👉 [http://localhost:3000](http://localhost:
 
 ## 💾 Base de données
 
-Le projet utilise **PlanetScale (MySQL)** pour une base scalable et sans downtime.  
+Le projet utilise **MySQL**.  
 L’accès se fait via **Prisma**, ce qui facilite la gestion du schéma avec la commande :
 
 ```bash
