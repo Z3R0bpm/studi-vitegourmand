@@ -87,7 +87,7 @@
 .table th,
 .table td {
   padding: 12px 14px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid var(--text-secondary);
   color: var(--text-primary);
 }
@@ -443,4 +443,124 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
+}
+
+.orderTracking {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.orderTrackingItem {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+  background: var(--background);
+}
+
+.orderTrackingHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.orderTrackingId {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.orderTrackingDelivery {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.orderTrackingSteps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.orderTrackingStep {
+  display: flex;
+  flex: 1;
+  min-width: 120px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  position: relative;
+}
+
+.orderTrackingStep:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 2px;
+  background: var(--text-secondary);
+  opacity: 0.35;
+}
+
+.orderTrackingStepDone:not(:last-child)::after,
+.orderTrackingStepActive:not(:last-child)::after {
+  opacity: 1;
+  background: var(--text-primary);
+}
+
+.orderTrackingStepMarker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--background);
+  z-index: 1;
+}
+
+.orderTrackingStepActive .orderTrackingStepMarker {
+  border-color: var(--text-primary);
+  color: var(--background);
+  background: var(--text-primary);
+}
+
+.orderTrackingStepDone .orderTrackingStepMarker {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+}
+
+.orderTrackingStepLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.orderTrackingStepActive .orderTrackingStepLabel,
+.orderTrackingStepDone .orderTrackingStepLabel {
+  color: var(--text-primary);
+}
+
+.orderTrackingMeta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
 }

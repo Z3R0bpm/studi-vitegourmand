@@ -1,10 +1,11 @@
+import { formatDate } from "../utils/formatDate"
 import styles from "./dashboard.module.css"
 import { getStatusClass, getStatusLabel } from "./status"
 
 type Order = {
   id: number
   orderDate: string
-  deliveryDate: string
+  deliveryDate: Date
   deliveryTime: string
   orderPrice: number
   groupSize: number
@@ -28,6 +29,11 @@ export function OrdersTable({
     return <p className={styles.empty}>Aucune commande pour le moment.</p>
   }
 
+  const showActions =
+    orders.find((order) => order.status === "On hold") !== undefined
+      ? true
+      : false
+
   const total = (order: Order) =>
     (order.orderPrice + order.deliveryPrice).toFixed(2)
 
@@ -45,6 +51,7 @@ export function OrdersTable({
             <th>Total</th>
             <th>Statut</th>
             <th>Matériel</th>
+            {showActions && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -65,7 +72,7 @@ export function OrdersTable({
               )}
               <td>{order.orderDate}</td>
               <td>
-                {order.deliveryDate}
+                {formatDate(order.deliveryDate)}
                 <br />
                 <span
                   style={{
@@ -77,7 +84,7 @@ export function OrdersTable({
               </td>
               <td>{order.menus.join(", ") || "—"}</td>
               <td>{order.groupSize}</td>
-              <td>{total(order)} €</td>
+              <td>{total(order)}€</td>
               <td>
                 <span
                   className={`${styles.status} ${styles[getStatusClass(order.status)]}`}>
@@ -88,6 +95,11 @@ export function OrdersTable({
                 {order.equipmentLending ? "Prêté" : "—"}
                 {order.equipmentReturn && " / Retourné"}
               </td>
+              {showActions && (
+                <td>
+                  <button className={styles.btnSecondary}>Annuler</button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

@@ -9,24 +9,13 @@ import {
   DISH_TYPE_LABELS,
   DISH_TYPE_ORDER,
   DISH_TYPES,
-  type DishType,
   filterBySearch,
   getDishTypeLabel,
   groupByDishType,
+  type Dish,
+  type DishType,
+  type FormOptions,
 } from "./dishTypes"
-
-type Dish = {
-  id: number
-  title: string
-  dishType: string
-  hasPicture: boolean
-  allergens: string[]
-  allergenIds: number[]
-}
-
-type FormOptions = {
-  allergens: { id: number; label: string }[]
-}
 
 function dishPictureUrl(id: number) {
   return `/api/dishes/${id}/picture`

@@ -13,6 +13,25 @@ export const DISH_TYPE_SINGULAR: Record<DishType, string> = {
   dessert: "Dessert",
 }
 
+export type DishOption = {
+  id: number
+  label: string
+  dishType: DishType
+}
+
+export type Dish = {
+  id: number
+  title: string
+  dishType: DishType
+  hasPicture: boolean
+  allergens: string[]
+  allergenIds: number[]
+}
+
+export type FormOptions = {
+  allergens: { id: number; label: string }[]
+}
+
 export const DISH_TYPE_ORDER: DishType[] = [...DISH_TYPES]
 
 export function isDishType(value: string): value is DishType {

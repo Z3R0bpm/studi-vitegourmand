@@ -10,6 +10,7 @@ import carouselStyles from "../menus/menus.module.css"
 import styles from "./dashboard.module.css"
 import { DishesByTypePicker } from "./DishesByTypePicker"
 import { DishSearchBar } from "./DishSearchBar"
+import { DishOption } from "./dishTypes"
 
 type Menu = {
   id: number
@@ -34,7 +35,7 @@ type Menu = {
 type FormOptions = {
   themes: { id: number; label: string }[]
   diets: { id: number; label: string }[]
-  dishes: { id: number; label: string; dishType: string }[]
+  dishes: DishOption[]
 }
 
 function MenuForm({
