@@ -1,20 +1,11 @@
+import { GeistMono } from "geist/font/mono"
+import { GeistSans } from "geist/font/sans"
 import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
-import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeHandler } from "./components/themeHandler"
 import { ThemeToggle } from "./components/ThemeToggle"
 import { CartProvider } from "./context/CartContext"
 import "./styles/globals.css"
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
 
 export const metadata: Metadata = {
   title: "Vite & Gourmand",
@@ -28,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${GeistSans.className} ${GeistMono.className}`}>
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="system"
