@@ -1,0 +1,317 @@
+.orderMain {
+  gap: 32px;
+  justify-content: flex-start;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  max-width: 720px;
+}
+
+.orderSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.orderHeading {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: left;
+  margin: 0;
+}
+
+.orderHint {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.customerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.customerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formField label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.formField input,
+.formField textarea {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--text-secondary);
+  background: var(--background);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.formField textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.orderEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+.orderLink {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+}
+
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+}
+
+.orderItemInfo h2 {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.orderItemInfo p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.orderQuantity {
+  margin-top: 4px;
+  color: var(--text-primary) !important;
+}
+
+.orderRemove {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--text-secondary);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.orderRemoveIcon {
+  display: block;
+  filter: brightness(0);
+}
+
+:global(html[data-theme="dark"]) .orderRemoveIcon {
+  filter: brightness(1);
+}
+
+.quantityButton {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--text-secondary);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  height: 2rem;
+}
+
+.orderDetails {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--text-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  table-layout: fixed;
+}
+
+.orderDetails th,
+.orderDetails td {
+  padding: 12px 16px;
+  vertical-align: top;
+  text-align: left;
+}
+
+.orderDetails th:nth-child(2),
+.orderDetails td:nth-child(2) {
+  width: 28%;
+  text-align: center;
+}
+
+.orderDetails th:last-child,
+.orderDetails td:last-child {
+  width: 26%; 
+  text-align: right;
+  white-space: nowrap;
+}
+
+.orderDetailHeader th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: color-mix(in srgb, var(--text-secondary) 10%, var(--background));
+  border-bottom: 1px solid var(--text-secondary);
+}
+
+.orderDetailBody tr {
+  border-bottom: 1px solid color-mix(in srgb, var(--text-secondary) 35%, transparent);
+}
+
+.orderDetailBody tr:last-child {
+  border-bottom: none;
+}
+
+.orderDetailBody td {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.orderDetailTitle {
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.orderDetailFooter {
+  border-top: 2px solid var(--text-secondary);
+}
+
+.orderDetailFooter tr {
+  border-bottom: 1px solid color-mix(in srgb, var(--text-secondary) 25%, transparent);
+}
+
+.orderDetailFooter tr:last-child {
+  border-bottom: none;
+}
+
+.orderDetailFooter td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.orderDetailFooter td:last-child {
+  font-weight: 600;
+}
+
+.orderDetailNote {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.orderDetailTotal td {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--text-secondary) 8%, var(--background));
+}
+
+.orderRemove:hover {
+  background: color-mix(in srgb, var(--text-secondary) 12%, transparent);
+}
+
+.quantityButton:hover {
+  background: color-mix(in srgb, var(--text-secondary) 12%, transparent);
+}
+
+.orderConfirmSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.confirmButton {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--text-primary);
+  background: var(--text-primary);
+  color: var(--background);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.confirmButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.confirmButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.orderError {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #c62828;
+  background: color-mix(in srgb, #c62828 12%, var(--background));
+  color: #c62828;
+  font-size: 0.9rem;
+}
+
+.orderSuccess {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #2e7d32;
+  background: color-mix(in srgb, #2e7d32 12%, var(--background));
+  color: #2e7d32;
+  font-size: 0.9rem;
+}

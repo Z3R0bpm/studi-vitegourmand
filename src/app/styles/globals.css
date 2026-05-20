@@ -37,7 +37,7 @@
 html,
 body {
   max-width: 100vw;
-  height: 100vh;
+  height: 100%;
   overflow : auto;
 }
 
@@ -79,6 +79,19 @@ header nav {
 header nav ul {
   display: inline-flex;
   gap: 16px;
+  align-items: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 a {
@@ -162,13 +175,31 @@ footer i {
 }
 
 @media (max-width: 600px) {
-  * {
+  .page,
+  .main,
+  .main section,
+  .main article {
     flex-wrap: wrap;
     flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    align-self: center;
+    align-items: center;
     text-align: center;
+  }
+
+  footer {
+    gap: 16px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  footer * {
+    align-items: center;
+    flex-direction: column;
+  }
+
+  header {
+    flex-direction: column;
   }
 
   header ul {

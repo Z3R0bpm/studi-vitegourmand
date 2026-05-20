@@ -14,7 +14,7 @@ const isCommonPassword = (password: string) => {
 
 export default async function checkPasswordStrength(password: string) {
   const MIN_LENGTH = 10
-  const MAX_LENGTH = 32
+  const MAX_LENGTH = 60
 
   if (!password || password.length < MIN_LENGTH || password.length > MAX_LENGTH)
     return PasswordStrengths.WrongSize
@@ -27,6 +27,5 @@ export default async function checkPasswordStrength(password: string) {
   strength += /[!@#$%^&*+_=]/.test(password) ? 1 : 0
   if (strength <= 2) return PasswordStrengths.Weak
   if (strength === 3) return PasswordStrengths.Medium
-  console.log("strong")
   return PasswordStrengths.Strong
 }

@@ -1,137 +1,113 @@
-.page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-  transition: 1s;
+.homeMain {
+  gap: 10vh;
+  justify-content: flex-start;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  margin: 0;
 }
 
-.main {
+.heroSection {
   display: flex;
-  min-height: 100vh;
+  flex-direction: column;
+  gap: 32px;
   width: 100%;
-  max-width: 1000px;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 20vh;
-  background-color: var(--background);
-  padding: 120px 60px;
-  transition: 1s;
 }
 
-.section {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  text-align: left;
-  gap: 10vw;
-}
-
-.section div {
+.heroContent {
   display: flex;
   flex-direction: column;
-  gap: 2vh;
-}
-
-.section h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.section p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.section a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
   gap: 16px;
-  font-size: 14px;
+  width: 100%;
 }
 
-.ctas a {
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.lead {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.lead a {
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.companyImage {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--text-secondary);
+  object-fit: cover;
+}
+
+.profileImage {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--text-secondary);
+  object-fit: cover;
+}
+
+.teamSection {
   display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  width: 100%;
   justify-content: center;
+}
+
+.teamCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  flex: 1;
+  min-width: 240px;
+  max-width: 480px;
 }
 
-/* .reviews {
-  
-} */
-
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.teamCaption {
+  font-size: 1.1rem;
+  text-align: center;
+  width: 90%;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin: 0;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
-}
+@media (min-width: 700px) {
+  .homeMain {
+  gap: 30vh;
+  margin: 10vh 0 10vh 0;
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-}
-
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
+  .heroSection {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
   }
 
-  .section {
-    gap: 16px;
+  .heroContent {
+    flex: 1;
+    max-width: 480px;
   }
 
-  .section h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-/* @media (max-width: 450px) {
-  
-} */
-
-html[data-theme="dark"] {
-  .companyImage {
-    filter: invert();
+  .heroSection .companyImage {
+    flex-shrink: 0;
+    max-width: 380px;
   }
 }
