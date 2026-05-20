@@ -25,7 +25,7 @@ async function getUserOrders(userId: number) {
   return orders.map((order) => ({
     id: order.id,
     orderDate: formatDate(order.order_date),
-    deliveryDate: formatDate(order.delivery_date),
+    deliveryDate: order.delivery_date,
     deliveryTime: order.delivery_time,
     orderPrice: order.order_price,
     groupSize: order.group_size,
@@ -53,7 +53,7 @@ async function getAllOrders() {
   return orders.map((order) => ({
     id: order.id,
     orderDate: formatDate(order.order_date),
-    deliveryDate: formatDate(order.delivery_date),
+    deliveryDate: order.delivery_date,
     deliveryTime: order.delivery_time,
     orderPrice: order.order_price,
     groupSize: order.group_size,

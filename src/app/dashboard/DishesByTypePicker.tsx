@@ -6,15 +6,10 @@ import { DishSearchBar } from "./DishSearchBar"
 import {
   DISH_TYPE_LABELS,
   DISH_TYPE_ORDER,
+  type DishOption,
   filterBySearch,
   groupByDishType,
 } from "./dishTypes"
-
-type DishOption = {
-  id: number
-  label: string
-  dishType: string
-}
 
 export function DishesByTypePicker({
   dishes,

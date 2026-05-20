@@ -1,6 +1,12 @@
 "use client"
 
-import { useActionState, useCallback, useEffect, useMemo, useState } from "react"
+import {
+  useActionState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react"
 import { searchUsersAction, updateUserRole } from "../actions"
 import debounce from "../utils/debounce"
 import styles from "./dashboard.module.css"
@@ -61,27 +67,31 @@ function UserRoleForm({
   return (
     <form action={formAction} className={styles.userRoleForm}>
       <input type="hidden" name="userId" value={user.id} />
-      <select
-        name="roleId"
-        value={selectedRoleId}
-        onChange={(e) => setSelectedRoleId(Number(e.target.value))}
-        disabled={pending}
-        aria-label={`Rôle de ${user.firstname} ${user.lastname}`}>
-        {roles.map((role) => (
-          <option
-            key={role.id}
-            value={role.id}
-            disabled={user.id === currentUserId && role.id < 2}>
-            {roleDisplayLabel(role.label)}
-          </option>
-        ))}
-      </select>
-      <button
-        type="submit"
-        className={styles.btnSecondary}
-        disabled={pending}>
-        {pending ? "…" : "Appliquer"}
-      </button>
+      {user.roleId !== 2 && (
+        <select
+          name="roleId"
+          value={selectedRoleId}
+          onChange={(e) => setSelectedRoleId(Number(e.target.value))}
+          disabled={pending}
+          aria-label={`Rôle de ${user.firstname} ${user.lastname}`}>
+          {roles.map((role) => (
+            <option
+              key={role.id}
+              value={role.id}
+              disabled={user.id === currentUserId && role.id < 2}>
+              {roleDisplayLabel(role.label)}
+            </option>
+          ))}
+        </select>
+      )}
+      {user.roleId !== 2 && (
+        <button
+          type="submit"
+          className={styles.btnSecondary}
+          disabled={pending}>
+          {pending ? "…" : "Appliquer"}
+        </button>
+      )}
       {state?.error && <span className={styles.error}>{state.error}</span>}
       {state?.success && (
         <span className={styles.success}>Rôle mis à jour</span>
@@ -135,9 +145,7 @@ export function AdminUsersSection({
   const handleRoleUpdated = useCallback(
     (userId: number, roleId: number, roleLabel: string) => {
       setResults((prev) =>
-        prev.map((u) =>
-          u.id === userId ? { ...u, roleId, roleLabel } : u,
-        ),
+        prev.map((u) => (u.id === userId ? { ...u, roleId, roleLabel } : u)),
       )
     },
     [],

@@ -2,13 +2,14 @@
 
 import { useActionState } from "react"
 import { updateOrderStatus } from "../actions"
+import { formatDate } from "../utils/formatDate"
 import styles from "./dashboard.module.css"
 import { ORDER_STATUSES, getStatusClass, getStatusLabel } from "./status"
 
 type Order = {
   id: number
   orderDate: string
-  deliveryDate: string
+  deliveryDate: Date
   deliveryTime: string
   orderPrice: number
   groupSize: number
@@ -20,7 +21,10 @@ type Order = {
 }
 
 function OrderStatusForm({ order }: { order: Order }) {
-  const [state, formAction, pending] = useActionState(updateOrderStatus, undefined)
+  const [state, formAction, pending] = useActionState(
+    updateOrderStatus,
+    undefined,
+  )
 
   return (
     <form action={formAction} className={styles.orderForm}>
@@ -32,10 +36,7 @@ function OrderStatusForm({ order }: { order: Order }) {
           </option>
         ))}
       </select>
-      <button
-        type="submit"
-        className={styles.btnSecondary}
-        disabled={pending}>
+      <button type="submit" className={styles.btnSecondary} disabled={pending}>
         {pending ? "…" : "OK"}
       </button>
       {state?.error && <span className={styles.error}>{state.error}</span>}
@@ -83,7 +84,7 @@ export function EmployeeOrdersSection({ orders }: { orders: Order[] }) {
               </td>
               <td>{order.orderDate}</td>
               <td>
-                {order.deliveryDate}
+                {formatDate(order.deliveryDate)}
                 <br />
                 <span
                   style={{
@@ -95,7 +96,7 @@ export function EmployeeOrdersSection({ orders }: { orders: Order[] }) {
               </td>
               <td>{order.menus.join(", ") || "—"}</td>
               <td>{order.groupSize}</td>
-              <td>{total(order)} €</td>
+              <td>{total(order)}€</td>
               <td>
                 <span
                   className={`${styles.status} ${styles[getStatusClass(order.status)]}`}>
