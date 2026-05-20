@@ -119,7 +119,7 @@ export default function SignUp() {
             id="password"
             name="password"
             onChange={(e) => isPasswordValid(e.target.value)}
-            maxLength={32}
+            maxLength={60}
             autoComplete="new-password"
             required
           />

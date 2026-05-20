@@ -10,7 +10,7 @@ export default function NotFound() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (countdown === 0) {
-        router.replace("/") // or router.push('/') for history push
+        router.replace("/")
       } else {
         setCountdown((prev) => prev - 1)
       }

@@ -14,7 +14,7 @@ const isCommonPassword = (password: string) => {
 
 export default async function checkPasswordStrength(password: string) {
   const MIN_LENGTH = 10
-  const MAX_LENGTH = 32
+  const MAX_LENGTH = 60
 
   if (!password || password.length < MIN_LENGTH || password.length > MAX_LENGTH)
     return PasswordStrengths.WrongSize
