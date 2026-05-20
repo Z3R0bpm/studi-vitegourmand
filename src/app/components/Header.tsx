@@ -1,8 +1,16 @@
 "use client"
+
+import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useCart } from "../context/CartContext"
 import { useSession } from "../hooks/useSession"
+import styles from "./styles/header.module.css"
 
 export function Header() {
-  const { session, roleId, loading } = useSession()
+  const { session, roleId } = useSession()
+  const { isEmpty, itemCount } = useCart()
+  const pathname = usePathname()
   const dashboardLabel =
     roleId !== null && roleId >= 1 ? "Tableau de bord" : "Profil"
 
@@ -13,6 +21,28 @@ export function Header() {
       </a>
       <nav>
         <ul>
+          {!isEmpty && (
+            <li
+              className={
+                styles.cartLinkContainer +
+                (pathname === "/order"
+                  ? ""
+                  : " " + styles.cartLinkContainerAnimation)
+              }>
+              <Link href="/order" className={styles.cartLink}>
+                <Image
+                  src="/shoppingCart.svg"
+                  alt=""
+                  width={22}
+                  height={22}
+                  className={styles.cartIcon}
+                  aria-hidden
+                />
+                <span className={styles.cartCount}>{itemCount}</span>
+                <span className="sr-only">Panier</span>
+              </Link>
+            </li>
+          )}
           <li>
             <a href="/menus">Menus</a>
           </li>

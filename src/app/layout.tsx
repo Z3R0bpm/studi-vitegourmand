@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes"
 import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeHandler } from "./components/themeHandler"
 import { ThemeToggle } from "./components/ThemeToggle"
+import { CartProvider } from "./context/CartContext"
 import "./styles/globals.css"
 
 const geistSans = Geist({
@@ -32,7 +33,7 @@ export default function RootLayout({
           attribute="data-theme"
           defaultTheme="system"
           enableSystem>
-          {children}
+          <CartProvider>{children}</CartProvider>
           <ThemeToggle />
           <ThemeHandler />
         </ThemeProvider>

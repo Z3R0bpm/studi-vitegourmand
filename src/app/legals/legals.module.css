@@ -1,0 +1,10 @@
+.legals a {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.legals {
+  text-align: center;
+  line-height: 40px;
+  color: var(--text-secondary);
+}

@@ -1,5 +1,11 @@
 "use client"
+
+import Image from "next/image"
+import { redirect } from "next/navigation"
+import { useCallback } from "react"
+import { useCart } from "../context/CartContext"
 import { getDishTypeLabel } from "../dashboard/dishTypes"
+import { useSession } from "../hooks/useSession"
 import { DishImageCarousel, type CarouselSlide } from "./DishImageCarousel"
 import styles from "./menus.module.css"
 
@@ -20,6 +26,15 @@ export type PublicMenu = {
 }
 
 export function MenuCard({ menu }: { menu: PublicMenu }) {
+  const { addToCart } = useCart()
+  const { session } = useSession()
+  const tryAddToCart = useCallback(() => {
+    if (!session) {
+      redirect("/login")
+    }
+    addToCart(menu)
+  }, [session, addToCart])
+
   const dishSections = [
     { label: getDishTypeLabel("starter"), items: menu.dishes.starters },
     { label: getDishTypeLabel("main"), items: menu.dishes.mains },
@@ -54,6 +69,21 @@ export function MenuCard({ menu }: { menu: PublicMenu }) {
             ))}
           </ul>
         )}
+
+        <button
+          type="button"
+          className={styles.addToCartButton}
+          onClick={() => tryAddToCart()}
+          aria-label={`Ajouter ${menu.title} au panier`}>
+          <Image
+            src="/addShoppingCart.svg"
+            alt=""
+            width={22}
+            height={22}
+            aria-hidden
+          />
+          Commander
+        </button>
       </div>
     </article>
   )

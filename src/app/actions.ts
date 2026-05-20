@@ -22,6 +22,7 @@ import {
   searchUsers,
 } from "./lib/db"
 import { parseDishPictureFromForm } from "./lib/dishPicture"
+import { cartSubtotal, deliveryPriceForCity } from "./lib/orderPricing"
 import checkPasswordStrength from "./lib/passwordTester"
 import { prisma } from "./lib/prisma"
 import { createSession, getSession } from "./lib/session"
@@ -159,7 +160,193 @@ export const testPassword = async (password: string) => {
   return checkPasswordStrength(password)
 }
 
-export async function order() {}
+type OrderCartPayload = { menuId: number; quantity: number }[]
+
+function parseOrderCart(raw: string | null): OrderCartPayload | null {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    if (!Array.isArray(parsed) || parsed.length === 0) return null
+    const items: OrderCartPayload = []
+    for (const entry of parsed) {
+      if (
+        !entry ||
+        typeof entry !== "object" ||
+        typeof (entry as OrderCartPayload[number]).menuId !== "number" ||
+        typeof (entry as OrderCartPayload[number]).quantity !== "number"
+      ) {
+        return null
+      }
+      const { menuId, quantity } = entry as OrderCartPayload[number]
+      if (!Number.isInteger(menuId) || menuId < 1) return null
+      if (!Number.isInteger(quantity) || quantity < 1 || quantity > 60) {
+        return null
+      }
+      items.push({ menuId, quantity })
+    }
+    return items
+  } catch {
+    return null
+  }
+}
+
+export async function submitOrder(
+  _prev: { error?: string; success?: boolean; orderId?: number } | undefined,
+  formData: FormData,
+) {
+  const session = await getSession()
+  if (!session?.userId) {
+    return { error: "Vous devez être connecté pour passer commande" }
+  }
+
+  const firstName = sanitizeString(formData.get("firstName") as string)
+  const lastName = sanitizeString(formData.get("lastName") as string)
+  const email = sanitizeEmail(formData.get("email") as string)
+  const phoneNumber = sanitizePhoneNumber(formData.get("phoneNumber") as string)
+  const address = sanitizeString(formData.get("address") as string)
+  const city = sanitizeString(formData.get("city") as string)
+  const country = sanitizeString(formData.get("country") as string)
+  const deliveryDateRaw = (formData.get("deliveryDate") as string)?.trim()
+  const deliveryTime = (formData.get("deliveryTime") as string)?.trim()
+
+  if (!email.includes("@") || email.length > 255 || email.length < 3) {
+    return { error: "L'adresse email est invalide" }
+  }
+  if (!isValidEmail(email)) {
+    return { error: "L'adresse email est invalide" }
+  }
+  if (firstName.length < 2 || firstName.length > 50) {
+    return { error: "Le prénom est invalide" }
+  }
+  if (lastName.length < 2 || lastName.length > 50) {
+    return { error: "Le nom est invalide" }
+  }
+  if (!phoneNumber || phoneNumber.length > 50 || phoneNumber.length < 10) {
+    return {
+      error: "Le numéro de téléphone doit contenir au moins 10 caractères",
+    }
+  }
+  if (!address || address.length > 50 || address.length < 10) {
+    return { error: "L'adresse doit contenir au moins 10 caractères" }
+  }
+  if (!city || city.length > 50 || city.length < 3) {
+    return { error: "La ville doit contenir au moins 3 caractères" }
+  }
+  if (!country || country.length > 50 || country.length < 3) {
+    return { error: "Le pays doit contenir au moins 3 caractères" }
+  }
+  if (!deliveryDateRaw || !deliveryTime) {
+    return { error: "La date et l'heure de livraison sont requises" }
+  }
+
+  const deliveryDate = new Date(deliveryDateRaw)
+  if (Number.isNaN(deliveryDate.getTime())) {
+    return { error: "La date de livraison est invalide" }
+  }
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  deliveryDate.setHours(0, 0, 0, 0)
+  if (deliveryDate < today) {
+    return { error: "La date de livraison doit être aujourd'hui ou ultérieure" }
+  }
+  if (deliveryTime.length > 50) {
+    return { error: "L'heure de livraison est invalide" }
+  }
+
+  const cartPayload = parseOrderCart(formData.get("cart") as string)
+  if (!cartPayload) {
+    return { error: "Votre panier est vide ou invalide" }
+  }
+
+  const menuIds = [...new Set(cartPayload.map((item) => item.menuId))]
+  const menus = await prisma.menus.findMany({
+    where: {
+      id: { in: menuIds },
+      OR: [{ available: null }, { available: { not: 0 } }],
+    },
+  })
+  if (menus.length !== menuIds.length) {
+    return { error: "Un ou plusieurs menus ne sont plus disponibles" }
+  }
+
+  const menuById = new Map(menus.map((menu) => [menu.id, menu]))
+  const lineItems = cartPayload.map(({ menuId, quantity }) => {
+    const menu = menuById.get(menuId)!
+    if (quantity < menu.min_group_size) {
+      return null
+    }
+    return {
+      menuId,
+      quantity,
+      pricePerPerson: menu.price_per_person,
+      minGroupSize: menu.min_group_size,
+    }
+  })
+  if (lineItems.some((item) => item === null)) {
+    return { error: "La quantité minimale n'est pas respectée pour un menu" }
+  }
+
+  const validItems = lineItems.filter(
+    (item): item is NonNullable<typeof item> => item !== null,
+  )
+
+  const orderPrice = cartSubtotal(validItems)
+  const deliveryPrice = deliveryPriceForCity(city)
+  const groupSize = validItems.reduce((sum, item) => sum + item.quantity, 0)
+
+  const user = await getUserById(session.userId)
+  if (!user) {
+    return { error: "Utilisateur introuvable" }
+  }
+
+  if (email !== user.email) {
+    const existing = await prisma.users.findUnique({ where: { email } })
+    if (existing) {
+      return { error: "Cette adresse email est déjà utilisée" }
+    }
+  }
+
+  const order = await prisma.$transaction(async (tx) => {
+    await tx.users.update({
+      where: { id: session.userId },
+      data: {
+        firstname: firstName,
+        lastname: lastName,
+        email,
+        phone: phoneNumber,
+        address,
+        city,
+        country,
+      },
+    })
+
+    const created = await tx.orders.create({
+      data: {
+        user_id: session.userId,
+        order_date: new Date(),
+        delivery_date: deliveryDate,
+        delivery_time: deliveryTime,
+        order_price: orderPrice,
+        group_size: groupSize,
+        delivery_price: deliveryPrice,
+        status: "On hold",
+      },
+    })
+
+    await tx.orders_menus.createMany({
+      data: validItems.map((item) => ({
+        order_id: created.id,
+        menu_id: item.menuId,
+      })),
+    })
+
+    return created
+  })
+
+  revalidatePath("/dashboard")
+  revalidatePath("/order")
+  return { success: true, orderId: order.id }
+}
 
 export const sendContactMessage = async (formData: FormData) => {}
 
@@ -283,7 +470,11 @@ export async function getEmployeeDashboardData() {
     dishes,
     formOptions,
     isAdmin,
-    roles,
+    roles: roles
+      .map((role) =>
+        role.id !== 2 ? { id: role.id, label: role.label } : null,
+      )
+      .filter((role) => role !== null),
     currentUserId: user.id,
   }
 }
