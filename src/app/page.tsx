@@ -8,83 +8,60 @@ export default function Home() {
   return (
     <div className="page">
       <Header />
-      <main className="main">
-        <section className={styles.section}>
-          <div>
-            <h1>Qu'est ce que Vite & Gourmand ?</h1>
-            <p>
-              Looking for a starting point or more instructions? Head over to{" "}
-              <a
-                href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer">
-                Templates
-              </a>{" "}
-              or the{" "}
-              <a
-                href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer">
-                Learning
-              </a>{" "}
-              center.
+      <main className={`main ${styles.homeMain}`}>
+        <section className={styles.heroSection}>
+          <div className={styles.heroContent}>
+            <h1 className={styles.heading}>
+              Qu&apos;est-ce que Vite &amp; Gourmand ?
+            </h1>
+            <p className={styles.lead}>
+              Vite & Gourmand est un site de commande de repas en ligne pour
+              toutes les occasions. Découvrez nos <a href="/menus">menus</a> et
+              commandez votre repas en ligne dès maintenant.
             </p>
           </div>
           <Image
             className={styles.companyImage}
-            src="/next.svg"
-            alt="Next.js logo"
-            width={300}
-            height={100}
+            src="/kitchen.jpg"
+            alt="Cuisine"
+            width={600}
+            height={600}
             priority
           />
         </section>
-        <section className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer">
+        <section className={styles.teamSection}>
+          <article className={styles.teamCard}>
             <Image
-              className={styles.companyImage}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer">
-            Documentation
-          </a>
-        </section>
-        <section className={styles.section}>
-          <div>
-            <Image
-              className={styles.companyImage}
-              src="/next.svg"
+              className={styles.profileImage}
+              src="/julie.jpg"
               alt="Julie"
-              width={100}
-              height={100}
+              width={480}
+              height={600}
             />
-            <p>Hi ! I'm Julie</p>
-          </div>
-          <div>
+            <p className={styles.teamCaption}>
+              Julie imagine les menus de Vite & Gourmand en mêlant cuisine de
+              saison et produits locaux. Elle accompagne chaque client pour
+              créer une expérience sur mesure, du dîner intimiste aux grands
+              événements.
+            </p>
+          </article>
+          <article className={styles.teamCard}>
             <Image
-              className={styles.companyImage}
-              src="/next.svg"
-              alt="Jose"
-              width={100}
-              height={100}
+              className={styles.profileImage}
+              src="/jose.jpg"
+              alt="José"
+              width={480}
+              height={600}
             />
-            <p>Hi ! I'm Jose</p>
-          </div>
+            <p className={styles.teamCaption}>
+              José veille à l’organisation et à la logistique de chaque
+              prestation. De la préparation en cuisine à la livraison sur place,
+              il s’assure que chaque plat arrive à l’heure, parfaitement
+              présenté et prêt à être dégusté.
+            </p>
+          </article>
         </section>
-        <section>{/* <Reviews /> */}</section>
+        {/* <section> <Reviews /> </section>*/}
       </main>
       <Footer />
     </div>
