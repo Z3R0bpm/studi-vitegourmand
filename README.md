@@ -2,8 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 # 🍽️ Vite & Gourmand
 
-**Vite & Gourmand** est une application web de **commande de plats traiteur haut de gamme**, conçue pour offrir une **expérience utilisateur fluide, moderne et élégante**.  
-Grâce à une interface épurée et performante, les utilisateurs peuvent découvrir, personnaliser et commander des plats d’exception en toute simplicité.
+**Vite & Gourmand** est une application web de **commande de menus de traiteur haut de gamme**, conçue pour offrir une **expérience utilisateur fluide, moderne et élégante**.  
+Grâce à une interface épurée et performante, les utilisateurs peuvent découvrir et commander des menus d’exception en toute simplicité.
 
 ---
 
@@ -11,10 +11,10 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 
 - 🧭 **Interface moderne** — design clair et agréable, adapté aux mobiles et tablettes.
 - ⚡ **Performances optimisées** — rendu serveur côté Next.js et hydration rapide grâce à React 19.
-- 🍽️ **Catalogue dynamique** — plats filtrables par catégorie, saison ou préférences alimentaires.
+- 🍽️ **Catalogue dynamique** — menus filtrables par catégorie, saison ou préférences alimentaires.
 - 💳 **Commande fluide** — ajout au panier, validation et suivi en temps réel.
 - 🌙 **Mode clair/sombre** — basculement automatique ou manuel via _next-themes_.
-- 🧑‍🍳 **Espace traiteur** — gestion des plats, commandes et clients.
+- 🧑‍🍳 **Espace traiteur** — gestion des plats, des menus, ainsi que des commandes et clients.
 
 ---
 
@@ -25,9 +25,9 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 - **Langage :** [TypeScript](https://www.typescriptlang.org/)
 - **Styles :** CSS global + modules, gestion du thème via [next-themes](https://github.com/pacocoursey/next-themes)
 - **Linting & Qualité :** ESLint flat config + eslint-config-next
-- **Base de données :** [MySQL]() (MySQL)
+- **Base de données :** [MySQL](https://www.mysql.com/fr/) via [Aiven](https://aiven.io/)
 - **ORM :** [Prisma](https://www.prisma.io/)
-- **Hébergement :** Vercel
+- **Hébergement :** [Vercel](https://vercel.com/)
 
 ---
 
@@ -38,16 +38,19 @@ Grâce à une interface épurée et performante, les utilisateurs peuvent décou
 git clone https://github.com/Z3R0bpm/studi-vitegourmand.git
 
 # 2️⃣ Accéder au dossier
-cd vite-et-gourmand
+cd studi-vitegourmand
 
 # 3️⃣ Installer les dépendances
 npm install
 
 # 4️⃣ Configurer les variables d’environnement
-cp .env.example .env.local
+cp .env.example .env
 # Ensuite, renseigne les valeurs (Base de données MySQL, etc.)
 
-# 5️⃣ Lancer le projet en développement
+# 5️⃣ Générer les modèles Prisma
+npx prisma generate
+
+# 6️⃣ Lancer le projet en développement
 npm run dev
 ```
 
@@ -57,7 +60,7 @@ Une fois démarré, rends-toi sur 👉 [http://localhost:3000](http://localhost:
 
 ## 💾 Base de données
 
-Le projet utilise **MySQL**.  
+Le projet utilise **MySQL** via **Aiven**.  
 L’accès se fait via **Prisma**, ce qui facilite la gestion du schéma avec la commande :
 
 ```bash
@@ -69,13 +72,6 @@ et l’inspection du modèle :
 ```bash
 npx prisma studio
 ```
-
----
-
-## 🎨 Aperçu visuel
-
-_TBD_  
-![Vite & Gourmand UI Preview](source)
 
 ---
 

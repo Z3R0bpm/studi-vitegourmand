@@ -18,6 +18,8 @@ export default function LogIn() {
     setShowPassword(event.target.checked)
   }
 
+  const [email, setEmail] = useState("")
+
   const { session, loading } = useSession()
   if (loading)
     return (
@@ -29,10 +31,23 @@ export default function LogIn() {
   return (
     <div className="page">
       <Header />
+      {email === "studi-admin" && (
+        <span className={styles.quickMessage}>
+          Si vous êtes un examinateur, pour tester l'application, utilisez :{" "}
+          <a
+            onClick={() => setEmail("studi-admin@gmail.com")}
+            className={styles.quickMessageEmail}>
+            studi-admin@gmail.com
+          </a>{" "}
+          avec le mot de passe fourni dans la copie.
+        </span>
+      )}
       <main className="main">
         <Form formAction={formAction} submitText="Connexion">
           <label htmlFor="email">Email</label>
           <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             type="email"
             id="email"
             name="email"
